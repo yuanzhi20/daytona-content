@@ -1,0 +1,154 @@
+---
+title: "Run Omni Engineer and Claude Engineer in Daytona with Dev Containers"
+description: "Learn how to use Daytona dev containers to instantly spin up development environments for AI coding assistants Omni Engineer and Claude Engineer."
+author: "yuanzhi20"
+tags: ["ai", "python", "devcontainer", "dev-environment"]
+---
+
+# Run Omni Engineer and Claude Engineer in Daytona with Dev Containers
+
+[Omni Engineer](https://github.com/Doriandarko/omni-engineer) and [Claude Engineer](https://github.com/Doriandarko/claude-engineer) are two powerful AI coding assistants that help developers write, debug, and refactor code through natural language conversations. They integrate with OpenAI and Anthropic Claude APIs to provide intelligent code assistance directly in your terminal.
+
+In this guide, you'll learn how to set up both tools in Daytona using dev containers, giving you a consistent, pre-configured development environment that works instantly—no manual setup required.
+
+## Prerequisites
+
+- A [Daytona](https://daytona.io) account
+- An OpenAI API key (for Omni Engineer) and/or Anthropic API key (for Claude Engineer)
+- Git installed on your local machine
+
+## What Are Dev Containers?
+
+Dev containers (development containers) allow you to define your development environment as code. Using a `devcontainer.json` file, you specify the base image, dependencies, extensions, and configurations needed for your project. Daytona automatically detects and uses dev container configurations, creating consistent environments across your team.
+
+## Setting Up Omni Engineer
+
+### Step 1: Fork and Clone
+
+First, fork the [Omni Engineer repository](https://github.com/Doriandarko/omni-engineer) and clone it to your local machine:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/omni-engineer.git
+cd omni-engineer
+```
+
+### Step 2: Open in Daytona
+
+Open the project in Daytona. Daytona will automatically detect the `.devcontainer/devcontainer.json` configuration we've prepared.
+
+```bash
+daytona open .
+```
+
+### Step 3: Configure API Keys
+
+The dev container expects your API keys as environment variables. In Daytona, you can set these through the environment configuration:
+
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `ANTHROPIC_API_KEY`: Your Anthropic API key (optional, for Claude fallback)
+
+### Step 4: Install Dependencies
+
+The dev container runs `pip install -r requirements.txt` automatically during setup, so all dependencies are ready when the container starts.
+
+### Step 5: Run Omni Engineer
+
+Start using Omni Engineer:
+
+```bash
+python main.py
+```
+
+You can now interact with the AI coding assistant in your terminal.
+
+## Setting Up Claude Engineer
+
+### Step 1: Fork and Clone
+
+Fork the [Claude Engineer repository](https://github.com/Doriandarko/claude-engineer) and clone it:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/claude-engineer.git
+cd claude-engineer
+```
+
+### Step 2: Open in Daytona
+
+```bash
+daytona open .
+```
+
+### Step 3: Configure API Key
+
+Set your `ANTHROPIC_API_KEY` in Daytona's environment configuration. Claude Engineer also supports optional OpenAI keys.
+
+### Step 4: Run Claude Engineer
+
+Start the web interface:
+
+```bash
+python app.py
+```
+
+Claude Engineer's web interface will be available on port 5000.
+
+## Working with Both Tools
+
+Both tools share similar usage patterns. Here's a concrete example of using Omni Engineer to refactor Python code:
+
+1. Start Omni Engineer: `python main.py`
+2. Paste your Python code and ask: "Refactor this to use async/await"
+3. Review the AI-generated changes and apply them
+
+## Dev Container Configuration Details
+
+The dev container configuration for both tools includes:
+
+- **Base Image**: `mcr.microsoft.com/devcontainers/python:3.11` — a lightweight Python development environment
+- **Post-Create Command**: Automatically installs Python dependencies from `requirements.txt`
+- **VS Code Extensions**: Pre-installs Python and Pylance extensions for syntax highlighting, linting, and IntelliSense
+- **Secrets Management**: API keys configured as environment secrets, keeping them secure and separate from the codebase
+
+### Omni Engineer Dev Container
+
+```json
+{
+  "name": "Omni Engineer",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "postCreateCommand": "pip install -r requirements.txt",
+  "customizations": {
+    "vscode": {"extensions": ["ms-python.python", "ms-python.vscode-pylance"]}
+  },
+  "secrets": {
+    "OPENAI_API_KEY": {"description": "OpenAI API key"},
+    "ANTHROPIC_API_KEY": {"description": "Anthropic API key"}
+  }
+}
+```
+
+### Claude Engineer Dev Container
+
+```json
+{
+  "name": "Claude Engineer",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "postCreateCommand": "pip install -r requirements.txt",
+  "customizations": {
+    "vscode": {"extensions": ["ms-python.python", "ms-python.vscode-pylance"]}
+  },
+  "forwardPorts": [5000],
+  "secrets": {
+    "ANTHROPIC_API_KEY": {"description": "Anthropic API key for Claude"},
+    "OPENAI_API_KEY": {"description": "OpenAI API key (optional)"}
+  }
+}
+```
+
+## Conclusion
+
+With Daytona dev containers, you can get Omni Engineer and Claude Engineer running in minutes instead of hours. The dev containers handle all the setup—Python runtime, dependencies, and IDE extensions—so you can focus on using the tools, not configuring them.
+
+The dev container configurations are now available as PRs to both upstream repositories, making it easy for the community to benefit from this setup.
+
+- [Omni Engineer Dev Container PR](https://github.com/Doriandarko/omni-engineer/pull/28)
+- [Claude Engineer Dev Container PR](https://github.com/Doriandarko/claude-engineer/pull/252)
